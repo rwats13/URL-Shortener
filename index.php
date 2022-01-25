@@ -1,3 +1,20 @@
+<!-- Redirecting the user to their original link using shortened link -->
+<?php 
+    if (isset($_GET['u'])) {
+        include "php/config.php";
+        $u = mysqli_real_escape_string($conn, $_GET['u']);
+
+        // Getting the full URL of the short URL
+        $sql = mysqli_query($conn, "SELECT full_url FROM url where shorten_url = '{$u}'");
+        if (mysqli_num_rows($sql) > 0) {
+            $full_url = mysqli_fetch_assoc($sql);
+            header("Location:" . $full_url['full_url']);
+        }
+    }
+    
+?>
+
+
 <!DOCTYPE html>
 <!-- URL Shortener Web Application by Reece Watson - Tutorial by CodingNepal 
     (youtube.com/codingnepal) -->
@@ -15,7 +32,7 @@
     </div> -->
     <div class="wrapper">
         <form action="#">
-            <input type="text" placeholder="Enter or paste your URL here" required>
+            <input type="text" name="full-url" placeholder="Enter or paste your URL here" required>
             <i class="url-icon uil uil-link"></i>
             <button>Shorten</button>
         </form>
@@ -34,7 +51,7 @@
             </div>
             <div class="data">
                 <li><a href="#">example.com/123abc</a></li>
-                <li>www.example.com/test/example/12345abcedf?test=yes</li>
+                <li>https://www.codingnepalweb.com/p/about-us.html</li>
                 <li>20</li>
                 <li><a href="#">Delete</a></li>
             </div>
@@ -90,7 +107,7 @@
         </div>
         <form action="#">
             <label>Edit your shortened URL</label>
-            <input type="text" spellcheck="false" value="example.com/123abc">
+            <input type="text" spellcheck="false" value="">
             <i class="copy-icon uil uil-copy-alt"></i>
             <button>Save</button>
         </form>

@@ -2,7 +2,10 @@
 
 const form = document.querySelector(".wrapper form"),
 fullURL = form.querySelector("input"),
-shortenBtn = form.querySelector("button");
+shortenBtn = form.querySelector("button"),
+blurEffect = document.querySelector(".blur-effect"),
+popupBox = document.querySelector(".popup-box"),
+shortenURL = popupBox.querySelector("input");
 
 // Prevents form submitting
 form.onsubmit = (e)=>{
@@ -15,8 +18,17 @@ shortenBtn.onclick = ()=>{
     xhr.onload = ()=>{
         if (xhr.readyState == 4 && xhr.status == 200) {
             let data = xhr.response;
-            console.log(data);
+            if (data.length <= 5) {
+                blurEffect.style.display = "block";
+                popupBox.classList.add("show");
+
+                let domain = "localhost/url?u=";
+                shortenURL.value = domain + data;
+            } else {
+                alert(data);
+            }
         }
     }
-    xhr.send();
+    let formData = new FormData(form);
+    xhr.send(formData);
 }
